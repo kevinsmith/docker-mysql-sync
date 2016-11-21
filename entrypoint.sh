@@ -40,7 +40,7 @@ mysqldump \
   --host="${DEST_HOST}" \
   "${DEST_NAME}"
 
-echo -e "Loading export into target database."
+echo -e "Loading export into destination database."
 mysql \
   --user="${DEST_USER}" \
   --password="${DEST_PASS}" \
