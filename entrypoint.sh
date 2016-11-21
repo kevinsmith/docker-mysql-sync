@@ -1,77 +1,51 @@
 #!/bin/bash
 
-SOURCE_DB_HOST=${SOURCE_DB_HOST}
-SOURCE_DB_USER=${SOURCE_DB_USER}
-SOURCE_DB_PASS=${SOURCE_DB_PASS}
-SOURCE_DB_NAME=${SOURCE_DB_NAME}
+#
+# Check required environment variables
+#
 
-TARGET_DB_HOST=${TARGET_DB_HOST}
-TARGET_DB_USER=${TARGET_DB_USER}
-TARGET_DB_PASS=${TARGET_DB_PASS}
-TARGET_DB_NAME=${TARGET_DB_NAME}
+REQUIRED=( SRC_HOST SRC_USER SRC_PASS SRC_NAME DEST_HOST DEST_USER DEST_PASS DEST_NAME )
 
-# Preflight checks
-if [[ ${SOURCE_DB_HOST} == "" ]]; then
-  echo "The SOURCE_DB_HOST env variable is required."
-  exit 1
-fi
-if [[ ${SOURCE_DB_USER} == "" ]]; then
-  echo "The SOURCE_DB_USER env variable is required."
-  exit 1
-fi
-if [[ ${SOURCE_DB_PASS} == "" ]]; then
-  echo "The SOURCE_DB_PASS env variable is required."
-  exit 1
-fi
-if [[ ${SOURCE_DB_NAME} == "" ]]; then
-  echo "The SOURCE_DB_NAME env variable is required."
-  exit 1
-fi
-if [[ ${TARGET_DB_HOST} == "" ]]; then
-  echo "The TARGET_DB_HOST env variable is required."
-  exit 1
-fi
-if [[ ${TARGET_DB_USER} == "" ]]; then
-  echo "The TARGET_DB_USER env variable is required."
-  exit 1
-fi
-if [[ ${TARGET_DB_PASS} == "" ]]; then
-  echo "The TARGET_DB_PASS env variable is required."
-  exit 1
-fi
-if [[ ${TARGET_DB_NAME} == "" ]]; then
-  echo "The TARGET_DB_NAME env variable is required."
-  exit 1
-fi
+for i in "${REQUIRED[@]}"
+do
+  if [ -z "${!i}" ]; then
+      echo -e "Environment variable ${i} is required, exiting..."
+      exit 1
+  fi
+done
+
+#
+# Sync source to destination
+#
 
 echo -e "Exporting source database."
 mysqldump \
-  --user="${SOURCE_DB_USER}" \
-  --password="${SOURCE_DB_PASS}" \
-  --host="${SOURCE_DB_HOST}" \
-  "${SOURCE_DB_NAME}" \
+  --user="${SRC_USER}" \
+  --password="${SRC_PASS}" \
+  --host="${SRC_HOST}" \
+  "${SRC_NAME}" \
   > /sql/dump.sql
 
-echo -e "Clearing target database."
+echo -e "Clearing destination database."
 mysqldump \
-  --user="${TARGET_DB_USER}" \
-  --password="${TARGET_DB_PASS}" \
-  --host="${TARGET_DB_HOST}" \
+  --user="${DEST_USER}" \
+  --password="${DEST_PASS}" \
+  --host="${DEST_HOST}" \
   --add-drop-table \
-  --no-data "${TARGET_DB_NAME}" | \
+  --no-data "${DEST_NAME}" | \
   grep -e ^DROP -e FOREIGN_KEY_CHECKS | \
   mysql \
-  --user="${TARGET_DB_USER}" \
-  --password="${TARGET_DB_PASS}" \
-  --host="${TARGET_DB_HOST}" \
-  "${TARGET_DB_NAME}"
+  --user="${DEST_USER}" \
+  --password="${DEST_PASS}" \
+  --host="${DEST_HOST}" \
+  "${DEST_NAME}"
 
 echo -e "Loading export into target database."
 mysql \
-  --user="${TARGET_DB_USER}" \
-  --password="${TARGET_DB_PASS}" \
-  --host="${TARGET_DB_HOST}" \
-  "${TARGET_DB_NAME}" \
+  --user="${DEST_USER}" \
+  --password="${DEST_PASS}" \
+  --host="${DEST_HOST}" \
+  "${DEST_NAME}" \
   < /sql/dump.sql
 
 echo -e "Sync completed."
