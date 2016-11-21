@@ -18,6 +18,11 @@ done
 # Sync source to destination
 #
 
+while ! mysqladmin ping -h "${SRC_HOST}" --silent; do
+    echo -e "MySQL server at ${SRC_HOST} not ready, trying again later..."
+    sleep 1
+done
+
 echo -e "Exporting source database."
 mysqldump \
   --user="${SRC_USER}" \
@@ -25,6 +30,11 @@ mysqldump \
   --host="${SRC_HOST}" \
   "${SRC_NAME}" \
   > /sql/dump.sql
+
+while ! mysqladmin ping -h "${DEST_HOST}" --silent; do
+    echo -e "MySQL server at ${DEST_HOST} not ready, trying again later..."
+    sleep 1
+done
 
 echo -e "Clearing destination database."
 mysqldump \
