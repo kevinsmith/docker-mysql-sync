@@ -4,7 +4,7 @@ A Docker image for a one-way sync from one MySQL database to another.
 
 ## License
 
-Copyright 2016 Kevin Smith
+Copyright 2017 Kevin Smith
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
