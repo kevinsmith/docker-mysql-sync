@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Kevin Smith <kevin@kevinsmith.io>
 
 RUN apk add --update mysql-client bash && rm -rf /var/cache/apk/*
