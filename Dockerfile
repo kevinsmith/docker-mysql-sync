@@ -1,7 +1,13 @@
-FROM alpine:edge
+FROM debian:jessie
 MAINTAINER Kevin Smith <kevin@kevinsmith.io>
 
-RUN apk add --update mysql-client bash && rm -rf /var/cache/apk/*
+# Install the MySQL client
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    mysql-client \
+
+  # Cleanup
+  && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /sql
 
 COPY entrypoint.sh /
