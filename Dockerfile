@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:8.7
 MAINTAINER Kevin Smith <kevin@kevinsmith.io>
 
 # Install the MySQL client
