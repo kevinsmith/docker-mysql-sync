@@ -42,7 +42,7 @@ services:
 
 ```
 
-The important bits are the environment variables.
+The important bits are the environment variables, **all of which are required**.
 
 | Environment Variable | Description |
 |----------------------|-------------|
