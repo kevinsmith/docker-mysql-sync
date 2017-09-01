@@ -6,16 +6,16 @@ Since the source database may be in another Docker container that is still in th
 
 ## Usage
 
-There are several ways to use `klsmith/mysql-sync`.
+There are several ways to run `klsmith/mysql-sync`.
 
 Stand-alone:
 
 ```
-docker run -e SRC_HOST=sourcehost.com \
+docker run -e SRC_HOST=sourcehost.example.com \
     -e SRC_NAME=source_db_name \
     -e SRC_PASS=source_db_pass \
     -e SRC_USER=source_db_user \
-    -e DEST_HOST=destinationhost.com \
+    -e DEST_HOST=destinationhost.example.com \
     -e DEST_NAME=destination_db_name \
     -e DEST_PASS=destination_db_pass \
     -e DEST_USER=destination_db_user \
@@ -31,11 +31,11 @@ services:
   mysql-sync:
     image: 'klsmith/mysql-sync:latest'
     environment:
-      - SRC_HOST=sourcehost.com
+      - SRC_HOST=sourcehost.example.com
       - SRC_NAME=source_db_name
       - SRC_PASS=source_db_pass
       - SRC_USER=source_db_user
-      - DEST_HOST=destinationhost.com
+      - DEST_HOST=destinationhost.example.com
       - DEST_NAME=destination_db_name
       - DEST_PASS=destination_db_pass
       - DEST_USER=destination_db_user
