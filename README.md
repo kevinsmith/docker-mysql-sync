@@ -1,6 +1,6 @@
 # klsmith/mysql-sync
 
-A simple Docker utility that wraps MySQL command line tools to perform a one-way sync from one database to another.
+A Docker utility that wraps MySQL command line tools to perform a one-way sync from one database to another.
 
 Since the source database may be in another Docker container that is still in the process of coming up, this utility automatically waits on the source database to become accessible before continuing.
 
