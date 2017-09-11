@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 #
 # Check required environment variables
 #
