@@ -6,7 +6,7 @@ set -e
 # Check required environment variables
 #
 
-REQUIRED=( SRC_HOST SRC_USER SRC_PASS SRC_NAME DEST_HOST DEST_USER DEST_PASS DEST_NAME )
+REQUIRED=( SRC_HOST SRC_PORT SRC_USER SRC_PASS SRC_NAME DEST_HOST DEST_PORT DEST_USER DEST_PASS DEST_NAME )
 
 for i in "${REQUIRED[@]}"
 do
@@ -30,6 +30,7 @@ mysqldump \
   --user="${SRC_USER}" \
   --password="${SRC_PASS}" \
   --host="${SRC_HOST}" \
+  --port="${SRC_PORT}" \
   "${SRC_NAME}" \
   > /sql/dump.sql
 
@@ -43,6 +44,7 @@ mysqldump \
   --user="${DEST_USER}" \
   --password="${DEST_PASS}" \
   --host="${DEST_HOST}" \
+  --port="${DEST_PORT}" \
   --add-drop-table \
   --no-data "${DEST_NAME}" | \
   grep -e ^DROP -e FOREIGN_KEY_CHECKS | \
@@ -50,6 +52,7 @@ mysqldump \
   --user="${DEST_USER}" \
   --password="${DEST_PASS}" \
   --host="${DEST_HOST}" \
+  --port="${DEST_PORT}" \
   "${DEST_NAME}"
 
 echo -e "Loading export into destination database."
@@ -57,6 +60,7 @@ mysql \
   --user="${DEST_USER}" \
   --password="${DEST_PASS}" \
   --host="${DEST_HOST}" \
+  --port="${DEST_PORT}" \
   "${DEST_NAME}" \
   < /sql/dump.sql
 
