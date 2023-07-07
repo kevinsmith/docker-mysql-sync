@@ -20,7 +20,7 @@ done
 # Sync source to destination
 #
 
-while ! mysqladmin ping -h "${SRC_HOST}" --silent; do
+while ! mysqladmin ping -h "${SRC_HOST}" -P "${SRC_PORT}" --silent; do
     echo -e "MySQL server at ${SRC_HOST} not ready, trying again later..."
     sleep 1
 done
