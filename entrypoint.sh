@@ -6,7 +6,7 @@ set -e
 # Check required environment variables
 #
 
-REQUIRED=( SRC_HOST SRC_PORT SRC_USER SRC_PASS SRC_NAME DEST_HOST DEST_PORT DEST_USER DEST_PASS DEST_NAME )
+REQUIRED=( SRC_HOST SRC_USER SRC_PASS SRC_NAME DEST_HOST DEST_USER DEST_PASS DEST_NAME )
 
 for i in "${REQUIRED[@]}"
 do
@@ -20,7 +20,7 @@ done
 # Sync source to destination
 #
 
-while ! mysqladmin ping -h "${SRC_HOST}" -P "${SRC_PORT}" --silent; do
+while ! mysqladmin ping -h "${SRC_HOST}" -P "${SRC_PORT:=3306}" --silent; do
     echo -e "MySQL server at ${SRC_HOST} not ready, trying again later..."
     sleep 1
 done
@@ -30,11 +30,11 @@ mysqldump \
   --user="${SRC_USER}" \
   --password="${SRC_PASS}" \
   --host="${SRC_HOST}" \
-  --port="${SRC_PORT}" \
+  --port="${SRC_PORT:=3306}" \
   "${SRC_NAME}" \
   > /sql/dump.sql
 
-while ! mysqladmin ping -h "${DEST_HOST}" -P "${DEST_PORT}" --silent; do
+while ! mysqladmin ping -h "${DEST_HOST}" -P "${DEST_PORT:=3306}" --silent; do
     echo -e "MySQL server at ${DEST_HOST} not ready, trying again later..."
     sleep 1
 done
@@ -44,7 +44,7 @@ mysqldump \
   --user="${DEST_USER}" \
   --password="${DEST_PASS}" \
   --host="${DEST_HOST}" \
-  --port="${DEST_PORT}" \
+  --port="${DEST_PORT:=3306}" \
   --add-drop-table \
   --no-data "${DEST_NAME}" | \
   grep -e ^DROP -e FOREIGN_KEY_CHECKS | \
@@ -52,7 +52,7 @@ mysqldump \
   --user="${DEST_USER}" \
   --password="${DEST_PASS}" \
   --host="${DEST_HOST}" \
-  --port="${DEST_PORT}" \
+  --port="${DEST_PORT:=3306}" \
   "${DEST_NAME}"
 
 echo -e "Loading export into destination database."
@@ -60,7 +60,7 @@ mysql \
   --user="${DEST_USER}" \
   --password="${DEST_PASS}" \
   --host="${DEST_HOST}" \
-  --port="${DEST_PORT}" \
+  --port="${DEST_PORT:=3306}" \
   "${DEST_NAME}" \
   < /sql/dump.sql
 
