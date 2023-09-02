@@ -12,10 +12,12 @@ Stand-alone:
 
 ```
 docker run -e SRC_HOST=sourcehost.example.com \
+    -e SRC_PORT=source_db_port \
     -e SRC_NAME=source_db_name \
     -e SRC_PASS=source_db_pass \
     -e SRC_USER=source_db_user \
     -e DEST_HOST=destinationhost.example.com \
+    -e DEST_PORT=destination_db_port \
     -e DEST_NAME=destination_db_name \
     -e DEST_PASS=destination_db_pass \
     -e DEST_USER=destination_db_user \
@@ -32,10 +34,12 @@ services:
     image: 'klsmith/mysql-sync:latest'
     environment:
       - SRC_HOST=sourcehost.example.com
+      - SRC_PORT=source_db_port
       - SRC_NAME=source_db_name
       - SRC_PASS=source_db_pass
       - SRC_USER=source_db_user
       - DEST_HOST=destinationhost.example.com
+      - DEST_PORT=destination_db_port
       - DEST_NAME=destination_db_name
       - DEST_PASS=destination_db_pass
       - DEST_USER=destination_db_user
@@ -47,10 +51,12 @@ The important bits are the environment variables, **all of which are required**.
 | Environment Variable | Description |
 |----------------------|-------------|
 | SRC_HOST | Source db hostname |
+| SRC_PORT | Source db port |
 | SRC_NAME | Source db name |
 | SRC_PASS | Source db password |   
 | SRC_USER | Source db username |
 | DEST_HOST | Destination db hostname |
+| DEST_PORT | Destination db port |
 | DEST_NAME | Destination db name |
 | DEST_PASS | Destination db password |   
 | DEST_USER | Destination db username |
